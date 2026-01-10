@@ -1,0 +1,144 @@
+name: Bug Report
+description: Report a bug or unexpected behavior
+title: "[BUG] "
+labels: ["bug", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please fill out the form below.
+        
+        **Before submitting:**
+        - Search existing issues to avoid duplicates
+        - Make sure you are using the latest version
+
+  - type: input
+    id: version
+    attributes:
+      label: FaceVerify Version
+      description: What version of FaceVerify are you using?
+      placeholder: "1.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      options:
+        - Windows 10/11
+        - Ubuntu/Debian Linux
+        - macOS
+        - Other Linux
+        - Docker
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python Version
+      description: What Python version are you using?
+      placeholder: "3.11.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: detector
+    attributes:
+      label: Detection Backend
+      description: Which face detection backend are you using?
+      options:
+        - opencv (default)
+        - mtcnn
+        - retinaface
+        - mediapipe
+        - Not applicable
+    validations:
+      required: true
+
+  - type: dropdown
+    id: embedding
+    attributes:
+      label: Embedding Model
+      description: Which embedding model are you using?
+      options:
+        - deepface/Facenet512 (default)
+        - deepface/VGG-Face
+        - deepface/ArcFace
+        - Other
+        - Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is
+      placeholder: Describe what happened...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Describe what you expected...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Install faceverify with '...'
+        2. Run command '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code Sample
+      description: If applicable, provide a minimal code sample that reproduces the issue
+      render: python
+      placeholder: |
+        from faceverify import FaceVerifier
+        
+        verifier = FaceVerifier()
+        result = verifier.verify("image1.jpg", "image2.jpg")
+        # Error occurs here
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error Message / Traceback
+      description: If applicable, paste the full error message or traceback
+      render: shell
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here (screenshots, logs, etc.)
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues for duplicates
+          required: true
+        - label: I am using the latest version of FaceVerify
+          required: true
+        - label: I have read the documentation
+          required: true

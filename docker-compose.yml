@@ -1,0 +1,124 @@
+# ==============================================================================
+# FaceVerify Docker Compose Configuration
+# ==============================================================================
+# Usage:
+#   Start:     docker-compose up -d
+#   Stop:      docker-compose down
+#   Logs:      docker-compose logs -f
+#   GPU Mode:  docker-compose --profile gpu up -d
+# ==============================================================================
+
+version: '3.8'
+
+services:
+  # ============================================================================
+  # FaceVerify API Server (CPU)
+  # ============================================================================
+  faceverify:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: faceverify:1.0.0rc1
+    container_name: faceverify-api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Model cache persistence
+      - faceverify-models:/home/appuser/.faceverify/models
+      # Data directory for input/output
+      - ./data:/app/data:ro
+    environment:
+      - FACEVERIFY_DETECTOR=opencv
+      - FACEVERIFY_EMBEDDING_MODEL=deepface
+      - FACEVERIFY_THRESHOLD=0.65
+      - FACEVERIFY_LOG_LEVEL=INFO
+      - FACEVERIFY_ENABLE_GPU=false
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '1'
+          memory: 2G
+
+  # ============================================================================
+  # FaceVerify API Server (GPU)
+  # ============================================================================
+  faceverify-gpu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: faceverify:1.0.0rc1-gpu
+    container_name: faceverify-api-gpu
+    ports:
+      - "8001:8000"
+    volumes:
+      - faceverify-models:/home/appuser/.faceverify/models
+      - ./data:/app/data:ro
+    environment:
+      - FACEVERIFY_DETECTOR=opencv
+      - FACEVERIFY_EMBEDDING_MODEL=deepface
+      - FACEVERIFY_THRESHOLD=0.65
+      - FACEVERIFY_LOG_LEVEL=INFO
+      - FACEVERIFY_ENABLE_GPU=true
+      - NVIDIA_VISIBLE_DEVICES=all
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    profiles:
+      - gpu
+
+  # ============================================================================
+  # Redis Cache (Optional - for production caching)
+  # ============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: faceverify-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - faceverify-redis:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    profiles:
+      - cache
+
+# ==============================================================================
+# Volumes
+# ==============================================================================
+volumes:
+  faceverify-models:
+    name: faceverify-models
+  faceverify-redis:
+    name: faceverify-redis
+
+# ==============================================================================
+# Networks
+# ==============================================================================
+networks:
+  default:
+    name: faceverify-network

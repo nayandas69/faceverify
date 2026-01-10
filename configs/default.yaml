@@ -1,0 +1,155 @@
+# FaceVerify Default Configuration
+# ================================
+# Copy this file and modify as needed for your use case.
+# Documentation: https://github.com/nayandas69/faceverify/blob/main/docs/guides/configuration.md
+
+# =============================================================================
+# Face Detection Settings
+# =============================================================================
+detector:
+  # Backend options: opencv, mtcnn, retinaface, mediapipe
+  # - opencv: Fast, no extra dependencies (Recommended for most users)
+  # - mtcnn: Good accuracy, requires 'mtcnn' package
+  # - retinaface: Best accuracy, requires 'retinaface' package
+  # - mediapipe: Good for real-time, requires 'mediapipe' package
+  backend: "opencv"
+  
+  # Minimum confidence threshold for face detection (0.0 - 1.0)
+  # Higher = stricter detection, may miss some faces
+  # Lower = more detections, may include false positives
+  confidence_threshold: 0.9
+  
+  # Minimum face size in pixels (width, height)
+  min_face_size: [20, 20]
+
+# =============================================================================
+# Face Embedding Settings
+# =============================================================================
+embedding:
+  # Model options: deepface, facenet, arcface, vggface
+  # - deepface: Uses DeepFace library with Facenet512 (Recommended)
+  # - facenet: FaceNet model (128-d embeddings)
+  # - arcface: ArcFace model (512-d embeddings)
+  # - vggface: VGGFace model (2048-d embeddings)
+  model: "deepface"
+  
+  # DeepFace specific settings
+  deepface:
+    # Model name within DeepFace: Facenet512, Facenet, VGG-Face, ArcFace
+    model_name: "Facenet512"
+  
+  # Whether to L2-normalize embeddings (recommended for cosine similarity)
+  normalize: true
+  
+  # Embedding dimension (auto-detected based on model)
+  # - Facenet512: 512
+  # - Facenet: 128
+  # - ArcFace: 512
+  # - VGGFace: 2048
+  dimension: 512
+
+# =============================================================================
+# Similarity Computation Settings
+# =============================================================================
+similarity:
+  # Metric options: cosine, euclidean, manhattan
+  # - cosine: Best for normalized embeddings (Recommended)
+  # - euclidean: L2 distance
+  # - manhattan: L1 distance
+  metric: "cosine"
+
+# =============================================================================
+# Decision Making Settings
+# =============================================================================
+decision:
+  # Similarity threshold for positive match (0.0 - 1.0)
+  # Higher = stricter matching (fewer false positives, more false negatives)
+  # Lower = looser matching (more false positives, fewer false negatives)
+  # 
+  # Recommended thresholds by use case:
+  # - High security (banking, access control): 0.75 - 0.85
+  # - Standard verification (attendance, login): 0.60 - 0.70
+  # - Loose matching (photo organization): 0.45 - 0.55
+  threshold: 0.65
+  
+  # Whether to use adaptive thresholding based on image quality
+  adaptive: false
+  
+  # Adaptive threshold settings (only used if adaptive: true)
+  adaptive_settings:
+    min_threshold: 0.50
+    max_threshold: 0.80
+    quality_weight: 0.1
+
+# =============================================================================
+# Performance Settings
+# =============================================================================
+performance:
+  # Enable GPU acceleration if available (requires CUDA)
+  enable_gpu: true
+  
+  # Batch size for processing multiple images
+  # Reduce if running out of memory
+  batch_size: 32
+  
+  # Number of worker threads for parallel processing
+  num_workers: 4
+  
+  # Cache embeddings to avoid recomputation
+  cache_embeddings: true
+  
+  # Maximum cache size (number of embeddings)
+  max_cache_size: 1000
+
+# =============================================================================
+# Preprocessing Settings
+# =============================================================================
+preprocessing:
+  # Target face size for embedding model (height, width)
+  face_size: [160, 160]
+  
+  # Apply histogram equalization to improve contrast
+  equalize_histogram: false
+  
+  # Apply face alignment before embedding extraction
+  align_faces: true
+  
+  # Color mode: rgb, bgr, grayscale
+  color_mode: "rgb"
+
+# =============================================================================
+# Logging Settings
+# =============================================================================
+logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  level: "INFO"
+  
+  # Log format: json, console
+  # - json: Structured logging for production
+  # - console: Human-readable for development
+  format: "console"
+  
+  # Log file path (optional, leave empty for stdout only)
+  file: ""
+
+# =============================================================================
+# API Server Settings (for REST API mode)
+# =============================================================================
+api:
+  # Server host
+  host: "0.0.0.0"
+  
+  # Server port
+  port: 8000
+  
+  # Enable CORS
+  cors_enabled: true
+  
+  # Allowed origins for CORS (use ["*"] for all)
+  cors_origins: ["*"]
+  
+  # Maximum upload file size in bytes (10MB)
+  max_upload_size: 10485760
+  
+  # Request timeout in seconds
+  timeout: 30

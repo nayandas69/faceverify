@@ -1,0 +1,84 @@
+name: Question
+description: Ask a question about using FaceVerify
+title: "[QUESTION] "
+labels: ["question"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question about FaceVerify? Please fill out the form below.
+        
+        **Before asking:**
+        - Check the documentation at docs/
+        - Search existing issues and discussions
+        - Review the examples/ folder
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Question Topic
+      description: What is your question about?
+      options:
+        - Installation / Setup
+        - Basic Usage
+        - Configuration
+        - Face Detection
+        - Embedding / Models
+        - Threshold Tuning
+        - Performance / Optimization
+        - Deployment / Production
+        - Integration with other tools
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: What would you like to know?
+      placeholder: "How do I..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Provide any relevant context for your question
+      placeholder: "I am trying to..."
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What I Have Tried
+      description: What have you already tried or looked at?
+      placeholder: |
+        - Read the documentation at...
+        - Tried the example code...
+        - Searched for...
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code Sample
+      description: If applicable, share your current code
+      render: python
+
+  - type: input
+    id: version
+    attributes:
+      label: FaceVerify Version
+      placeholder: "1.0.0"
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have checked the documentation
+          required: true
+        - label: I have searched existing issues
+          required: true

@@ -1,0 +1,84 @@
+name: Documentation Issue
+description: Report an issue or suggest improvement for documentation
+title: "[DOCS] "
+labels: ["documentation"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Found an issue with the documentation or have a suggestion? Let us know.
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Issue Type
+      description: What type of documentation issue is this?
+      options:
+        - Incorrect information
+        - Missing information
+        - Unclear explanation
+        - Typo / Grammar
+        - Broken link
+        - Missing example
+        - Improvement suggestion
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: location
+    attributes:
+      label: Documentation Location
+      description: Where is the issue located?
+      options:
+        - README.md
+        - docs/api/
+        - docs/guides/
+        - docs/tutorials/
+        - CONTRIBUTING.md
+        - CHANGELOG.md
+        - Code docstrings
+        - Jupyter notebooks
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: file
+    attributes:
+      label: Specific File / Section
+      description: Which specific file or section has the issue?
+      placeholder: "docs/guides/getting-started.md - Installation section"
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Current Content
+      description: What does the documentation currently say?
+      placeholder: "The documentation says..."
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected / Suggested Content
+      description: What should the documentation say instead?
+      placeholder: "It should say..."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to submit a PR to fix this documentation issue
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have verified this issue exists in the latest version
+          required: true

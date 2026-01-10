@@ -1,0 +1,8 @@
+name: Pull Request
+description: Submit changes to FaceVerify
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing to FaceVerify.
