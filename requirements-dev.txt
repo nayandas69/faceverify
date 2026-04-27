@@ -20,7 +20,7 @@ myst-parser>=1.0.0
 
 # Development utilities
 ipython>=8.0.0
-jupyter>=1.0.0
+jupyter>=1.1.1
 jupyterlab>=4.0.0
 
 # Type stubs
